@@ -1,71 +1,77 @@
-let stdArray = [];
+let arrData = [];
+if (localStorage.arrData != null) {
+    arrData = JSON.parse(localStorage.arrData);
+    render();
+}
+
+let userName;
+let userDOB;
+let userGender;
+let userNumber;
+let userMajor;
+let userImg;
 
 
-let stdName;
-let stdDate;
-let stdGender;
-let stdMajor;
-let stdImage;
-let stdNumber;
+let DataCollected = document.getElementById("main-form");
 
-let studentInfo = document.getElementById("main-form");
-studentInfo.addEventListener("submit", function (event) {
-    event.preventDefault();
-    stdName = event.target.full_name.value;
-    stdDate = event.target.date_of_birth.value;
-    stdGender = event.target.gender.value;
-    stdMajor = event.target.major.value;
-    stdImage = event.target.image.value;
-    stdNumber = event.target.phone_number.value;
-    studentInfo.reset();
-    let student = new Person(stdName, stdDate, stdGender, stdNumber, stdMajor, stdImage);
-    stdArray.push(student);
-    localStorage.setItem('stdArray', JSON.stringify(stdArray));
+DataCollected.addEventListener("submit", function (event) {
+    userName = event.target.full_name.value;
+    userDOB = event.target.date_of_birth.value;
+    userNumber = event.target.phone_number.value;
+    userGender = event.target.gender.value;
+    userMajor = event.target.major.value;
+    userImg = event.target.image.value;
+
+    console.log(userName, userDOB, userGender, userNumber, userMajor, userImg)
+    DataCollected.reset();
+
+
+    let student = new Person(userName, userDOB, userGender, userNumber, userMajor, userImg);
+
+    arrData.push(student);
+    localStorage.setItem('arrData', JSON.stringify(arrData));
     render();
 });
 
 
-function Person(stdName, stdDate, stdGender, stdNumber, stdMajor, stdImage) {
-    this.stdName = stdName;
-    this.stdDate = stdDate;
-    this.stdGender = stdGender;
-    this.stdMajor = stdMajor;
-    this.stdImage = stdImage;
-    this.stdNumber = stdNumber;
+function Person(userName, userDOB, userGender, userNumber, userMajor , userImg) {
+    this.userName = userName;
+    this.userDOB = userDOB;
+    this.userGender = userGender;
+    this.userNumber = userNumber;
+    this.userMajor = userMajor;
+    this.userImg = userImg;
 }
 
 
 
 //-------------show data-----------------//
 function render() {
-    for (let i = 0; i < stdArray.length; i++) {
-        let stdcard = document.getElementById("student-card");
-        let imageContent = document.createElement("div");
-        let image = document.createElement("img");
-        image.src = `${stdArray[i].stdImage}`;
-        imageContent.appendChild(image);
+    for (let i = 0; i < arrData.length; i++) {
 
-        let stdInfoContent = document.createElement("div");
-        let stdName = document.createElement("p");
-        stdName.textContent = `${stdArray[i].stdName}`;
+
         
+        let sdcard = document.getElementById("student-card");
+        let divContainer = document.createElement('div');
+        divContainer.classList.add("card");
+        let stdImage = document.createElement('img');
+        stdImage.src = arrData[i].userImg;
+        divContainer.appendChild(stdImage);
+        let ul = document.createElement("ul");
+        let li1 = document.createElement("li");
+        li1.textContent = `Name: ${arrData[i].userName}`;
+        let li2 = document.createElement("li");
+        li2.textContent = `Number: ${arrData[i].userNumber}`;
+        let li3 = document.createElement("li");
+        li3.textContent = `Major: ${arrData[i].userMajor}`;
 
+        ul.appendChild(li1);
+        ul.appendChild(li2);
+        ul.appendChild(li3);
 
+        divContainer.appendChild(ul);
+        sdcard.appendChild(divContainer);
 
-        let stdNumber = document.createElement("p");
-        stdNumber.textContent = `${stdArray[i].stdNumber}`;
-        
-
-
-
-
-        let stdMajor = document.createElement("p");
-        stdMajor.textContent = `${stdArray[i].stdMajor}`;
-        stdInfoContent.appendChild(stdName);
-        stdInfoContent.appendChild(stdNumber);
-        stdInfoContent.appendChild(stdMajor);
-        stdcard.appendChild(imageContent);
-        stdcard.appendChild(stdInfoContent);
     }
 }
 
